@@ -1,0 +1,39 @@
+# =============================================================================
+# SmartCampus — .gitignore
+# =============================================================================
+
+# Environnement (JAMAIS sur Git — contient les secrets)
+.env
+
+# Dépendances PHP
+/vendor/
+composer.lock
+
+# Uploads utilisateurs (données personnelles)
+/uploads/profiles/*
+/uploads/logos/*
+!uploads/profiles/.gitkeep
+!uploads/logos/.gitkeep
+
+# Logs
+*.log
+/logs/
+
+# OS & éditeurs
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+
+# Cache
+/cache/
+*.cache
+
+# Fichiers de configuration locaux
+config/database.local.php
+
+# Fichiers temporaires PHP
+*.tmp
