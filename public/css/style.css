@@ -1,0 +1,935 @@
+/* =============================================================================
+   SmartCampus SaaS — style.css
+   Design system complet : variables, navbar, sidebar, composants, dark mode
+   ============================================================================= */
+
+/* -----------------------------------------------------------------------------
+   1. VARIABLES CSS (tokens de design)
+   ----------------------------------------------------------------------------- */
+:root {
+    /* Couleurs tenant (surchargées dynamiquement par tenantCssVars()) */
+    --sc-primary         : #0b2b4f;
+    --sc-secondary       : #ffb347;
+    --sc-primary-light   : #1a4a7a;
+    --sc-primary-dark    : #061a30;
+
+    /* Couleurs système */
+    --sc-success         : #22c55e;
+    --sc-danger          : #ef4444;
+    --sc-warning         : #f59e0b;
+    --sc-info            : #3b82f6;
+
+    /* Surfaces (light mode) */
+    --sc-bg              : #f1f5f9;
+    --sc-surface         : #ffffff;
+    --sc-surface-2       : #f8fafc;
+    --sc-border          : #e2e8f0;
+
+    /* Texte */
+    --sc-text            : #1e293b;
+    --sc-text-muted      : #64748b;
+    --sc-text-light      : #94a3b8;
+
+    /* Layout */
+    --sc-navbar-h        : 64px;
+    --sc-sidebar-w       : 250px;
+    --sc-sidebar-w-mobile: 280px;
+    --sc-radius          : 10px;
+    --sc-radius-lg       : 16px;
+    --sc-shadow          : 0 1px 3px rgba(0,0,0,.08), 0 4px 12px rgba(0,0,0,.06);
+    --sc-shadow-lg       : 0 4px 24px rgba(0,0,0,.12);
+
+    /* Transitions */
+    --sc-transition      : 0.2s ease;
+}
+
+/* Dark mode */
+[data-bs-theme="dark"] {
+    --sc-bg              : #0f172a;
+    --sc-surface         : #1e293b;
+    --sc-surface-2       : #162032;
+    --sc-border          : #334155;
+    --sc-text            : #f1f5f9;
+    --sc-text-muted      : #94a3b8;
+    --sc-text-light      : #64748b;
+    --sc-shadow          : 0 1px 3px rgba(0,0,0,.3), 0 4px 12px rgba(0,0,0,.2);
+    --sc-shadow-lg       : 0 4px 24px rgba(0,0,0,.4);
+}
+
+/* -----------------------------------------------------------------------------
+   2. RESET & BASE
+   ----------------------------------------------------------------------------- */
+*, *::before, *::after { box-sizing: border-box; }
+
+html { scroll-behavior: smooth; }
+
+body {
+    font-family      : 'Inter', system-ui, -apple-system, sans-serif;
+    background       : var(--sc-bg);
+    color            : var(--sc-text);
+    font-size        : 14px;
+    line-height      : 1.6;
+    -webkit-font-smoothing: antialiased;
+    transition       : background var(--sc-transition), color var(--sc-transition);
+}
+
+h1,h2,h3,h4,h5,h6 {
+    font-family : 'Space Grotesk', 'Inter', sans-serif;
+    font-weight : 600;
+    color       : var(--sc-text);
+}
+
+a { color: var(--sc-primary); text-decoration: none; }
+a:hover { color: var(--sc-primary-light); }
+
+/* -----------------------------------------------------------------------------
+   3. LAYOUT PRINCIPAL
+   ----------------------------------------------------------------------------- */
+.sc-layout {
+    display        : flex;
+    min-height     : 100vh;
+    padding-top    : var(--sc-navbar-h);
+}
+
+.sc-main {
+    flex           : 1;
+    margin-left    : var(--sc-sidebar-w);
+    padding        : 24px;
+    min-width      : 0;
+    transition     : margin-left var(--sc-transition);
+}
+
+/* -----------------------------------------------------------------------------
+   4. NAVBAR
+   ----------------------------------------------------------------------------- */
+.sc-navbar {
+    height          : var(--sc-navbar-h);
+    background      : var(--sc-primary);
+    border-bottom   : 1px solid rgba(255,255,255,.08);
+    box-shadow      : 0 2px 16px rgba(0,0,0,.15);
+    z-index         : 1050;
+}
+
+.sc-navbar__logo {
+    height          : 36px;
+    width           : 36px;
+    object-fit      : contain;
+    border-radius   : 8px;
+}
+
+.sc-navbar__icon {
+    width           : 36px;
+    height          : 36px;
+    background      : var(--sc-secondary);
+    border-radius   : 8px;
+    display         : flex;
+    align-items     : center;
+    justify-content : center;
+    color           : var(--sc-primary);
+    font-size       : 16px;
+    font-weight     : 700;
+    flex-shrink     : 0;
+}
+
+.sc-navbar__brand-text {
+    display         : flex;
+    flex-direction  : column;
+    line-height     : 1.2;
+}
+
+.sc-navbar__app-name {
+    font-family     : 'Space Grotesk', sans-serif;
+    font-weight     : 700;
+    font-size       : 16px;
+    color           : #ffffff;
+    letter-spacing  : -.3px;
+}
+
+.sc-navbar__tenant-name {
+    font-size       : 11px;
+    color           : rgba(255,255,255,.6);
+    font-weight     : 400;
+}
+
+/* Recherche globale */
+.sc-search__wrapper {
+    position        : relative;
+    width           : 340px;
+}
+
+.sc-search__icon {
+    position        : absolute;
+    left            : 12px;
+    top             : 50%;
+    transform       : translateY(-50%);
+    color           : rgba(255,255,255,.5);
+    font-size       : 13px;
+}
+
+.sc-search__input {
+    width           : 100%;
+    background      : rgba(255,255,255,.1);
+    border          : 1px solid rgba(255,255,255,.15);
+    border-radius   : 8px;
+    padding         : 8px 12px 8px 36px;
+    color           : #ffffff;
+    font-size       : 13px;
+    transition      : var(--sc-transition);
+}
+
+.sc-search__input::placeholder { color: rgba(255,255,255,.45); }
+
+.sc-search__input:focus {
+    outline         : none;
+    background      : rgba(255,255,255,.18);
+    border-color    : rgba(255,255,255,.35);
+}
+
+/* Boutons icône navbar */
+.sc-btn-icon {
+    width           : 36px;
+    height          : 36px;
+    background      : rgba(255,255,255,.1);
+    border          : 1px solid rgba(255,255,255,.12);
+    border-radius   : 8px;
+    color           : rgba(255,255,255,.85);
+    display         : flex;
+    align-items     : center;
+    justify-content : center;
+    cursor          : pointer;
+    transition      : var(--sc-transition);
+    font-size       : 14px;
+    flex-shrink     : 0;
+}
+
+.sc-btn-icon:hover {
+    background      : rgba(255,255,255,.18);
+    color           : #ffffff;
+}
+
+/* Badge notification */
+.sc-badge {
+    position        : absolute;
+    top             : -4px;
+    right           : -4px;
+    min-width       : 18px;
+    height          : 18px;
+    background      : var(--sc-danger);
+    color           : #fff;
+    border-radius   : 9px;
+    font-size       : 10px;
+    font-weight     : 700;
+    display         : flex;
+    align-items     : center;
+    justify-content : center;
+    padding         : 0 4px;
+    border          : 2px solid var(--sc-primary);
+}
+
+/* Bouton utilisateur */
+.sc-user-btn {
+    background      : rgba(255,255,255,.1);
+    border          : 1px solid rgba(255,255,255,.12);
+    border-radius   : 10px;
+    padding         : 6px 10px;
+    cursor          : pointer;
+    transition      : var(--sc-transition);
+    color           : #fff;
+}
+
+.sc-user-btn:hover { background: rgba(255,255,255,.18); }
+
+.sc-user-btn__avatar,
+.sc-user-btn__initials {
+    width           : 32px;
+    height          : 32px;
+    border-radius   : 8px;
+    flex-shrink     : 0;
+}
+
+.sc-user-btn__avatar  { object-fit: cover; }
+
+.sc-user-btn__initials {
+    background      : var(--sc-secondary);
+    color           : var(--sc-primary);
+    display         : flex;
+    align-items     : center;
+    justify-content : center;
+    font-size       : 12px;
+    font-weight     : 700;
+}
+
+.sc-user-btn__name {
+    font-size       : 13px;
+    font-weight     : 600;
+    color           : #fff;
+    line-height     : 1.2;
+}
+
+.sc-user-btn__role {
+    font-size       : 11px;
+    color           : rgba(255,255,255,.55);
+}
+
+.sc-user-btn__arrow {
+    font-size       : 10px;
+    color           : rgba(255,255,255,.5);
+    margin-left     : 2px;
+}
+
+/* Dropdown commun */
+.sc-dropdown {
+    border          : 1px solid var(--sc-border);
+    border-radius   : var(--sc-radius-lg);
+    box-shadow      : var(--sc-shadow-lg);
+    background      : var(--sc-surface);
+    padding         : 6px;
+    min-width       : 220px;
+    overflow        : hidden;
+}
+
+.sc-dropdown__header {
+    padding         : 8px 10px 10px;
+    display         : flex;
+    justify-content : space-between;
+    align-items     : center;
+    border-bottom   : 1px solid var(--sc-border);
+    margin-bottom   : 4px;
+    font-weight     : 600;
+    font-size       : 13px;
+    color           : var(--sc-text);
+}
+
+.sc-dropdown__header small {
+    display         : block;
+    font-size       : 11px;
+    color           : var(--sc-text-muted);
+    font-weight     : 400;
+}
+
+.sc-dropdown__link {
+    font-size       : 12px;
+    font-weight     : 500;
+    color           : var(--sc-primary);
+}
+
+.sc-dropdown__item {
+    border-radius   : 8px;
+    padding         : 8px 10px;
+    font-size       : 13px;
+    color           : var(--sc-text);
+    display         : flex;
+    align-items     : center;
+    gap             : 8px;
+    transition      : var(--sc-transition);
+}
+
+.sc-dropdown__item i { width: 16px; text-align: center; color: var(--sc-text-muted); }
+.sc-dropdown__item:hover { background: var(--sc-surface-2); color: var(--sc-text); }
+.sc-dropdown__item--danger { color: var(--sc-danger) !important; }
+.sc-dropdown__item--danger i { color: var(--sc-danger); }
+
+.sc-dropdown__msg {
+    display         : flex;
+    flex-direction  : column;
+    padding         : 10px;
+    border-radius   : 8px;
+    transition      : var(--sc-transition);
+    color           : var(--sc-text);
+}
+
+.sc-dropdown__msg:hover { background: var(--sc-surface-2); }
+
+.sc-dropdown__msg--unread .sc-dropdown__msg-from { font-weight: 700; }
+
+.sc-dropdown__msg-from   { font-size: 13px; font-weight: 500; }
+.sc-dropdown__msg-subject{ font-size: 12px; color: var(--sc-text-muted); }
+.sc-dropdown__msg-time   { font-size: 11px; color: var(--sc-text-light); margin-top: 2px; }
+
+.sc-dropdown__loading,
+.sc-dropdown__empty {
+    padding         : 20px;
+    text-align      : center;
+    color           : var(--sc-text-muted);
+    font-size       : 13px;
+}
+
+.sc-dropdown__empty i { font-size: 24px; margin-bottom: 6px; display: block; }
+
+/* -----------------------------------------------------------------------------
+   5. SIDEBAR
+   ----------------------------------------------------------------------------- */
+.sc-sidebar {
+    position        : fixed;
+    top             : var(--sc-navbar-h);
+    left            : 0;
+    width           : var(--sc-sidebar-w);
+    height          : calc(100vh - var(--sc-navbar-h));
+    background      : var(--sc-surface);
+    border-right    : 1px solid var(--sc-border);
+    display         : flex;
+    flex-direction  : column;
+    overflow-y      : auto;
+    overflow-x      : hidden;
+    z-index         : 1040;
+    scrollbar-width : thin;
+    transition      : transform var(--sc-transition);
+}
+
+.sc-sidebar::-webkit-scrollbar { width: 4px; }
+.sc-sidebar::-webkit-scrollbar-thumb { background: var(--sc-border); border-radius: 4px; }
+
+/* Info utilisateur en haut sidebar */
+.sc-sidebar__user {
+    padding         : 16px;
+    display         : flex;
+    align-items     : center;
+    gap             : 10px;
+    border-bottom   : 1px solid var(--sc-border);
+    background      : var(--sc-surface-2);
+}
+
+.sc-sidebar__avatar,
+.sc-sidebar__initials {
+    width           : 40px;
+    height          : 40px;
+    border-radius   : 10px;
+    flex-shrink     : 0;
+}
+
+.sc-sidebar__avatar { object-fit: cover; }
+
+.sc-sidebar__initials {
+    background      : var(--sc-primary);
+    color           : #fff;
+    display         : flex;
+    align-items     : center;
+    justify-content : center;
+    font-weight     : 700;
+    font-size       : 14px;
+}
+
+.sc-sidebar__user-name {
+    font-size       : 13px;
+    font-weight     : 600;
+    color           : var(--sc-text);
+    line-height     : 1.3;
+    white-space     : nowrap;
+    overflow        : hidden;
+    text-overflow   : ellipsis;
+    max-width       : 160px;
+}
+
+.sc-sidebar__user-role {
+    font-size       : 11px;
+    color           : var(--sc-text-muted);
+    display         : flex;
+    align-items     : center;
+    gap             : 4px;
+    margin-top      : 2px;
+}
+
+/* Navigation sidebar */
+.sc-sidebar__nav { flex: 1; padding: 8px; }
+
+.sc-sidebar__list {
+    list-style      : none;
+    margin          : 0;
+    padding         : 0;
+}
+
+.sc-sidebar__section-title {
+    font-size       : 10px;
+    font-weight     : 700;
+    text-transform  : uppercase;
+    letter-spacing  : 1px;
+    color           : var(--sc-text-light);
+    padding         : 12px 10px 4px;
+}
+
+.sc-sidebar__link {
+    display         : flex;
+    align-items     : center;
+    gap             : 10px;
+    padding         : 9px 12px;
+    border-radius   : 8px;
+    color           : var(--sc-text-muted);
+    font-size       : 13.5px;
+    font-weight     : 500;
+    transition      : var(--sc-transition);
+    position        : relative;
+    margin-bottom   : 2px;
+}
+
+.sc-sidebar__link:hover {
+    background      : var(--sc-surface-2);
+    color           : var(--sc-text);
+}
+
+.sc-sidebar__link.active {
+    background      : rgba(11, 43, 79, .08);
+    color           : var(--sc-primary);
+    font-weight     : 600;
+}
+
+[data-bs-theme="dark"] .sc-sidebar__link.active {
+    background      : rgba(255,255,255,.08);
+    color           : var(--sc-secondary);
+}
+
+.sc-sidebar__link.active .sc-sidebar__icon { color: var(--sc-primary); }
+[data-bs-theme="dark"] .sc-sidebar__link.active .sc-sidebar__icon { color: var(--sc-secondary); }
+
+.sc-sidebar__icon { width: 18px; text-align: center; font-size: 14px; flex-shrink: 0; }
+
+.sc-sidebar__badge {
+    margin-left     : auto;
+    background      : var(--sc-danger);
+    color           : #fff;
+    border-radius   : 10px;
+    font-size       : 10px;
+    font-weight     : 700;
+    padding         : 1px 6px;
+}
+
+/* Pied de sidebar */
+.sc-sidebar__footer {
+    padding         : 12px;
+    border-top      : 1px solid var(--sc-border);
+}
+
+.sc-sidebar__logout {
+    display         : flex;
+    align-items     : center;
+    gap             : 8px;
+    padding         : 9px 12px;
+    border-radius   : 8px;
+    color           : var(--sc-danger);
+    font-size       : 13.5px;
+    font-weight     : 500;
+    transition      : var(--sc-transition);
+}
+
+.sc-sidebar__logout:hover { background: rgba(239,68,68,.08); color: var(--sc-danger); }
+
+.sc-sidebar__version {
+    font-size       : 10px;
+    color           : var(--sc-text-light);
+    text-align      : center;
+    margin-top      : 8px;
+}
+
+/* Overlay mobile */
+.sc-sidebar-overlay {
+    display         : none;
+    position        : fixed;
+    inset           : 0;
+    background      : rgba(0,0,0,.4);
+    z-index         : 1039;
+}
+
+.sc-sidebar-overlay--visible { display: block; }
+
+/* -----------------------------------------------------------------------------
+   6. CONTENEUR DE FLASH MESSAGES
+   ----------------------------------------------------------------------------- */
+.sc-flash-container { margin-bottom: 16px; }
+
+.sc-flash-container .alert {
+    border          : none;
+    border-radius   : var(--sc-radius);
+    font-size       : 13.5px;
+}
+
+/* -----------------------------------------------------------------------------
+   7. PAGE HEADER (titre de page)
+   ----------------------------------------------------------------------------- */
+.sc-page-header {
+    display         : flex;
+    align-items     : center;
+    justify-content : space-between;
+    margin-bottom   : 24px;
+    flex-wrap       : wrap;
+    gap             : 12px;
+}
+
+.sc-page-title {
+    font-size       : 22px;
+    font-weight     : 700;
+    color           : var(--sc-text);
+    margin          : 0;
+    display         : flex;
+    align-items     : center;
+    gap             : 10px;
+}
+
+.sc-page-title i {
+    color           : var(--sc-primary);
+    font-size       : 20px;
+}
+
+[data-bs-theme="dark"] .sc-page-title i { color: var(--sc-secondary); }
+
+/* -----------------------------------------------------------------------------
+   8. STAT CARDS (dashboard)
+   ----------------------------------------------------------------------------- */
+.sc-stat-card {
+    background      : var(--sc-surface);
+    border          : 1px solid var(--sc-border);
+    border-radius   : var(--sc-radius-lg);
+    padding         : 20px;
+    display         : flex;
+    align-items     : center;
+    gap             : 16px;
+    box-shadow      : var(--sc-shadow);
+    transition      : transform var(--sc-transition), box-shadow var(--sc-transition);
+    height          : 100%;
+}
+
+.sc-stat-card:hover {
+    transform       : translateY(-2px);
+    box-shadow      : var(--sc-shadow-lg);
+}
+
+.sc-stat-card__icon {
+    width           : 52px;
+    height          : 52px;
+    border-radius   : 12px;
+    display         : flex;
+    align-items     : center;
+    justify-content : center;
+    font-size       : 22px;
+    flex-shrink     : 0;
+}
+
+.sc-stat-card__icon--blue   { background: rgba(59,130,246,.12);  color: #3b82f6; }
+.sc-stat-card__icon--green  { background: rgba(34,197,94,.12);   color: #22c55e; }
+.sc-stat-card__icon--orange { background: rgba(255,179,71,.15);  color: #f59e0b; }
+.sc-stat-card__icon--purple { background: rgba(139,92,246,.12);  color: #8b5cf6; }
+.sc-stat-card__icon--red    { background: rgba(239,68,68,.1);    color: #ef4444; }
+
+.sc-stat-card__value {
+    font-size       : 28px;
+    font-weight     : 700;
+    color           : var(--sc-text);
+    line-height     : 1;
+    font-family     : 'Space Grotesk', sans-serif;
+}
+
+.sc-stat-card__label {
+    font-size       : 12px;
+    color           : var(--sc-text-muted);
+    margin-top      : 4px;
+    font-weight     : 500;
+}
+
+/* -----------------------------------------------------------------------------
+   9. CARDS GÉNÉRIQUES
+   ----------------------------------------------------------------------------- */
+.sc-card {
+    background      : var(--sc-surface);
+    border          : 1px solid var(--sc-border);
+    border-radius   : var(--sc-radius-lg);
+    box-shadow      : var(--sc-shadow);
+    overflow        : hidden;
+}
+
+.sc-card__header {
+    padding         : 16px 20px;
+    border-bottom   : 1px solid var(--sc-border);
+    display         : flex;
+    align-items     : center;
+    justify-content : space-between;
+    font-weight     : 600;
+    font-size       : 14px;
+    color           : var(--sc-text);
+    background      : var(--sc-surface-2);
+}
+
+.sc-card__header i { color: var(--sc-primary); margin-right: 8px; }
+[data-bs-theme="dark"] .sc-card__header i { color: var(--sc-secondary); }
+
+.sc-card__body { padding: 20px; }
+
+/* -----------------------------------------------------------------------------
+   10. TABLEAUX
+   ----------------------------------------------------------------------------- */
+.sc-table {
+    width           : 100%;
+    border-collapse : separate;
+    border-spacing  : 0;
+    font-size       : 13.5px;
+}
+
+.sc-table thead th {
+    background      : var(--sc-surface-2);
+    color           : var(--sc-text-muted);
+    font-weight     : 600;
+    font-size       : 12px;
+    text-transform  : uppercase;
+    letter-spacing  : .5px;
+    padding         : 10px 16px;
+    border-bottom   : 1px solid var(--sc-border);
+    white-space     : nowrap;
+}
+
+.sc-table tbody td {
+    padding         : 12px 16px;
+    border-bottom   : 1px solid var(--sc-border);
+    color           : var(--sc-text);
+    vertical-align  : middle;
+}
+
+.sc-table tbody tr:last-child td { border-bottom: none; }
+
+.sc-table tbody tr:hover td { background: var(--sc-surface-2); }
+
+/* -----------------------------------------------------------------------------
+   11. BADGES
+   ----------------------------------------------------------------------------- */
+.sc-badge-grade {
+    padding         : 3px 8px;
+    border-radius   : 6px;
+    font-size       : 12px;
+    font-weight     : 700;
+    display         : inline-block;
+}
+
+/* -----------------------------------------------------------------------------
+   12. BOUTONS SMARTCAMPUS
+   ----------------------------------------------------------------------------- */
+.sc-btn {
+    display         : inline-flex;
+    align-items     : center;
+    gap             : 6px;
+    padding         : 8px 16px;
+    border-radius   : 8px;
+    font-size       : 13.5px;
+    font-weight     : 600;
+    border          : none;
+    cursor          : pointer;
+    transition      : var(--sc-transition);
+    white-space     : nowrap;
+    text-decoration : none;
+}
+
+.sc-btn:hover { transform: translateY(-1px); }
+.sc-btn:active { transform: translateY(0); }
+
+.sc-btn--primary {
+    background      : var(--sc-primary);
+    color           : #fff;
+}
+.sc-btn--primary:hover { background: var(--sc-primary-light); color: #fff; }
+
+.sc-btn--secondary {
+    background      : var(--sc-secondary);
+    color           : var(--sc-primary);
+}
+.sc-btn--secondary:hover { background: #ffa01e; color: var(--sc-primary); }
+
+.sc-btn--outline {
+    background      : transparent;
+    border          : 1px solid var(--sc-border);
+    color           : var(--sc-text);
+}
+.sc-btn--outline:hover { background: var(--sc-surface-2); color: var(--sc-text); }
+
+.sc-btn--danger {
+    background      : var(--sc-danger);
+    color           : #fff;
+}
+.sc-btn--danger:hover { background: #dc2626; color: #fff; }
+
+.sc-btn--sm {
+    padding         : 5px 10px;
+    font-size       : 12px;
+}
+
+/* -----------------------------------------------------------------------------
+   13. FORMULAIRES
+   ----------------------------------------------------------------------------- */
+.sc-form-label {
+    font-size       : 13px;
+    font-weight     : 600;
+    color           : var(--sc-text);
+    margin-bottom   : 5px;
+    display         : block;
+}
+
+.sc-form-control {
+    width           : 100%;
+    padding         : 9px 12px;
+    background      : var(--sc-surface);
+    border          : 1px solid var(--sc-border);
+    border-radius   : 8px;
+    color           : var(--sc-text);
+    font-size       : 13.5px;
+    transition      : border-color var(--sc-transition), box-shadow var(--sc-transition);
+}
+
+.sc-form-control:focus {
+    outline         : none;
+    border-color    : var(--sc-primary);
+    box-shadow      : 0 0 0 3px rgba(11,43,79,.1);
+}
+
+[data-bs-theme="dark"] .sc-form-control {
+    background      : var(--sc-surface-2);
+    border-color    : var(--sc-border);
+    color           : var(--sc-text);
+}
+
+/* -----------------------------------------------------------------------------
+   14. MODALES
+   ----------------------------------------------------------------------------- */
+.modal-content {
+    border          : 1px solid var(--sc-border);
+    border-radius   : var(--sc-radius-lg);
+    box-shadow      : var(--sc-shadow-lg);
+    background      : var(--sc-surface);
+}
+
+.modal-header {
+    background      : var(--sc-primary);
+    color           : #fff;
+    border-radius   : calc(var(--sc-radius-lg) - 1px) calc(var(--sc-radius-lg) - 1px) 0 0;
+    border-bottom   : none;
+    padding         : 16px 20px;
+}
+
+.modal-header .modal-title { font-size: 15px; font-weight: 600; }
+.modal-header .btn-close { filter: invert(1); }
+.modal-body   { padding: 20px; }
+.modal-footer { padding: 16px 20px; border-top: 1px solid var(--sc-border); }
+
+/* -----------------------------------------------------------------------------
+   15. CHAT IA & MESSAGERIE
+   ----------------------------------------------------------------------------- */
+.sc-chat {
+    height          : 480px;
+    overflow-y      : auto;
+    padding         : 16px;
+    background      : var(--sc-surface-2);
+    border-radius   : var(--sc-radius);
+    border          : 1px solid var(--sc-border);
+    scroll-behavior : smooth;
+}
+
+.sc-chat__msg {
+    display         : flex;
+    margin-bottom   : 16px;
+}
+
+.sc-chat__msg--user  { justify-content: flex-end; }
+
+.sc-chat__bubble {
+    max-width       : 72%;
+    padding         : 11px 15px;
+    border-radius   : 16px;
+    font-size       : 13.5px;
+    line-height     : 1.55;
+    word-break      : break-word;
+}
+
+.sc-chat__msg--user .sc-chat__bubble {
+    background      : var(--sc-primary);
+    color           : #fff;
+    border-bottom-right-radius: 4px;
+}
+
+.sc-chat__msg--assistant .sc-chat__bubble {
+    background      : var(--sc-surface);
+    color           : var(--sc-text);
+    border          : 1px solid var(--sc-border);
+    border-bottom-left-radius: 4px;
+}
+
+.sc-chat__time {
+    font-size       : 10px;
+    opacity         : .6;
+    margin-top      : 4px;
+    text-align      : right;
+}
+
+/* -----------------------------------------------------------------------------
+   16. EMPTY STATES
+   ----------------------------------------------------------------------------- */
+.sc-empty {
+    text-align      : center;
+    padding         : 48px 24px;
+    color           : var(--sc-text-muted);
+}
+
+.sc-empty__icon {
+    font-size       : 48px;
+    margin-bottom   : 12px;
+    opacity         : .35;
+}
+
+.sc-empty__title {
+    font-size       : 16px;
+    font-weight     : 600;
+    color           : var(--sc-text);
+    margin-bottom   : 6px;
+}
+
+.sc-empty__desc { font-size: 13px; }
+
+/* -----------------------------------------------------------------------------
+   17. RESPONSIVE
+   ----------------------------------------------------------------------------- */
+@media (max-width: 991.98px) {
+    .sc-sidebar {
+        transform       : translateX(-100%);
+    }
+
+    .sc-sidebar--open {
+        transform       : translateX(0);
+        box-shadow      : var(--sc-shadow-lg);
+    }
+
+    .sc-main {
+        margin-left     : 0;
+        padding         : 16px;
+    }
+
+    .sc-search__wrapper { width: 200px; }
+}
+
+@media (max-width: 575.98px) {
+    .sc-search { display: none !important; }
+    .sc-stat-card__value { font-size: 22px; }
+    .sc-main { padding: 12px; }
+    .sc-page-title { font-size: 18px; }
+}
+
+/* -----------------------------------------------------------------------------
+   18. ANIMATIONS
+   ----------------------------------------------------------------------------- */
+@keyframes sc-fadeIn {
+    from { opacity: 0; transform: translateY(8px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+
+.sc-animate { animation: sc-fadeIn .35s ease both; }
+
+.sc-card,
+.sc-stat-card { animation: sc-fadeIn .3s ease both; }
+
+/* Délai d'apparition des stat cards */
+.sc-stat-card:nth-child(1) { animation-delay: .05s; }
+.sc-stat-card:nth-child(2) { animation-delay: .10s; }
+.sc-stat-card:nth-child(3) { animation-delay: .15s; }
+.sc-stat-card:nth-child(4) { animation-delay: .20s; }
+
+/* -----------------------------------------------------------------------------
+   19. UTILITAIRES DIVERS
+   ----------------------------------------------------------------------------- */
+.cursor-pointer { cursor: pointer; }
+.text-truncate-2 {
+    display            : -webkit-box;
+    -webkit-box-orient : vertical;
+    -webkit-line-clamp : 2;
+    overflow           : hidden;
+}
