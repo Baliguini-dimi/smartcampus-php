@@ -1,0 +1,74 @@
+# =============================================================================
+# SmartCampus SaaS — public/.htaccess
+# Réécriture URL + sécurité + headers HTTP
+# =============================================================================
+
+Options -Indexes
+RewriteEngine On
+
+# -----------------------------------------------------------------------------
+# 1. SÉCURITÉ — Headers HTTP
+# -----------------------------------------------------------------------------
+<IfModule mod_headers.c>
+    Header always set X-Content-Type-Options    "nosniff"
+    Header always set X-Frame-Options           "SAMEORIGIN"
+    Header always set X-XSS-Protection          "1; mode=block"
+    Header always set Referrer-Policy           "strict-origin-when-cross-origin"
+    Header always set Permissions-Policy        "camera=(), microphone=(), geolocation=()"
+</IfModule>
+
+# -----------------------------------------------------------------------------
+# 2. PROTECTION — Fichiers sensibles
+# -----------------------------------------------------------------------------
+<FilesMatch "\.(env|log|sql|json|lock|md|gitignore)$">
+    Order allow,deny
+    Deny from all
+</FilesMatch>
+
+<FilesMatch "^\.">
+    Order allow,deny
+    Deny from all
+</FilesMatch>
+
+# -----------------------------------------------------------------------------
+# 3. RÉÉCRITURE URL — Résolution du tenant
+# Pattern : /iua/dashboard.php → /dashboard.php?_tenant=iua
+# Pattern : /iua/             → /login.php?_tenant=iua
+# -----------------------------------------------------------------------------
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+
+# Sous-répertoire tenant avec fichier PHP
+RewriteRule ^([a-z0-9\-]+)/([a-zA-Z0-9_\-]+\.php)$ $2?_tenant=$1 [L,QSA]
+
+# Sous-répertoire tenant sans fichier (→ login)
+RewriteRule ^([a-z0-9\-]+)/?$ login.php?_tenant=$1 [L,QSA]
+
+# super_admin → pas de résolution tenant
+RewriteRule ^super_admin/(.*)$ super_admin/$1 [L,QSA]
+
+# -----------------------------------------------------------------------------
+# 4. PAGES D'ERREUR
+# -----------------------------------------------------------------------------
+ErrorDocument 404 /public/404.php
+ErrorDocument 403 /public/403.php
+ErrorDocument 500 /public/404.php
+
+# -----------------------------------------------------------------------------
+# 5. CACHE — Assets statiques
+# -----------------------------------------------------------------------------
+<IfModule mod_expires.c>
+    ExpiresActive On
+    ExpiresByType text/css             "access plus 1 week"
+    ExpiresByType application/javascript "access plus 1 week"
+    ExpiresByType image/png            "access plus 1 month"
+    ExpiresByType image/jpeg           "access plus 1 month"
+    ExpiresByType image/webp           "access plus 1 month"
+</IfModule>
+
+# -----------------------------------------------------------------------------
+# 6. COMPRESSION GZIP
+# -----------------------------------------------------------------------------
+<IfModule mod_deflate.c>
+    AddOutputFilterByType DEFLATE text/html text/css application/javascript
+</IfModule>
